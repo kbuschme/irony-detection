@@ -1,0 +1,4 @@
+# Ignore everything in this directory
+*.py
+# Except this file
+!.gitignore
