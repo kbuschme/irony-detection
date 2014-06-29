@@ -110,21 +110,28 @@ To start the system change the directory to `src` and run the file `main.py` whi
 the output should look as follows
 ```
 > python main.py
-usage: Irony Detector [-h] {corpus,feature,interactive,ml,rules,sets,test} ...
+usage: Irony Detector [-h] {corpus,feature,interactive,ml,sets} ...
 Irony Detector: error: too few arguments
 >
 ```
 
 The following commands are available and described in the Manual section below:
 
-* corpus
-* features
-* interactive
-* ml
-* rules
-* sets
-* test
+* `corpus`,
+* `features`,
+* `interactive`,
+* `ml` and
+* `sets`
 
+As a first step the `sets` command should be run. This will create three files inside the `corpora/SarcasmCorpus` directory. The file `shuffled_set.txt` is a randomized version of the corpus used for cross-validation. The files `training_set.txt` and `test_set.txt` are a training and test set and contain 90% and 10% of the reviews, respectively.
+```
+> python main.py sets
+```
+
+Now the *machine learning mode* of the system can be used to classify reviews. The following example applies 10-fold cross-validation:
+```
+> python main.py ml cross-validation
+```
 
 
 ## Manual
@@ -142,7 +149,7 @@ Show a detailed help message about the available commands:
 
 This should look like the following message:
 ```
-usage: Irony Detector [-h] {corpus,feature,interactive,ml,rules,sets,test} ...
+usage: Irony Detector [-h] {corpus,feature,interactive,ml,sets} ...
 
 Detects irony in amazon reviews.
 
@@ -152,7 +159,7 @@ optional arguments:
 Commands:
   The following commands can be invoked.
 
-  {corpus,feature,interactive,ml,rules,sets,test}
+  {corpus,feature,interactive,ml,sets}
                         Valid commands.
     corpus              Show details about the entire corpus.
     feature             Shows how often each feature is found for ironic and
@@ -160,11 +167,73 @@ Commands:
     interactive         The interactive mode classifies a given sentence using
                         a saved model.
     ml                  Use the machine learning approach to classify reviews.
-    rules               Use the rule based approach to classify reviews.
     sets                Divide the corpus into training, validation and test
                         set.
-    test                Test basic functionality of the application.
 ```
+
+
+### Corpus mode:
+The *corpus mode* shows general information about a corpus.
+
+Show all reviews inside the corpus:
+```
+> python main.py corpus reviews
+```
+
+Show some statistics about the corpus:
+```
+> python main.py corpus stats
+```
+
+
+
+### Feature mode:
+The *feature mode* displays statistics about the specific features or exports all features as Attribute-Relation File Format[](http://www.cs.waikato.ac.nz/ml/weka/arff.html) (ARFF).
+
+Show how often the specific features in all reviews:
+```
+> python main.py feature show
+```
+
+Export the extracted feature to an ARFF file:
+```
+> python main.py feature export
+```
+
+
+
+### Machine learning mode:
+The *machine learning mode* uses the following classifiers to classify the reviews:
+
+* Naive Bayes,
+* Decision Tree,
+* Random Forest,
+* Logistic Regression and
+* Support Vector Machine
+
+Use 10-fold cross-validation:
+```
+> python main.py ml cross-validation
+```
+
+Train the classifiers on a training set and classify a test set:
+```
+> python main.py ml test
+```
+
+
+
+### Set mode:
+On one hand the *sets mode* generates a shuffled set for cross-validation
+and on the other hand divides all reviews into a training and test set by a 90 to 10 ratio.
+```
+> python main.py sets
+```
+This command creates the following three files inside the directory `corpora/SarcasmCorpus`: 
+
+* `corpora/SarcasmCorpus/shuffled_set.txt`,
+* `corpora/SarcasmCorpus/training_set.txt` and
+* `corpora/SarcasmCorpus/test_set.txt`.
 
 
 
