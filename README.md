@@ -1,8 +1,5 @@
 # System for Irony Detection in Product Reviews
 
-**Please note**: The system still needs some clean-up, but will be available soon.
-
-
 
 This system was used for the paper 
 [An impact analysis of features in a classification approach to irony detection in product reviews](http://acl2014.org/acl2014/W14-26/pdf/W14-2608.pdf)[1].
