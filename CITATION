@@ -1,0 +1,17 @@
+To cite this system in publications, please use:
+
+	Konstantin Buschmeier, Philipp Cimiano, and Roman Klinger. An impact analysis of features in a classification approach to irony detection in product reviews. In Proceedings of the 5th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis, pages 42–49, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
+
+	A BibTeX entry for LaTeX users is
+
+	@InProceedings{buschmeier-cimiano-klinger:2014:W14-26,
+	author = {Buschmeier, Konstantin and Cimiano, Philipp and Klinger, Roman},
+	title = {An Impact Analysis of Features in a Classification Approach to Irony Detection in Product Reviews},
+	booktitle = {Proceedings of the 5th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
+	month = {June},
+	year = {2014},
+	address = {Baltimore, Maryland},
+	publisher = {Association for Computational Linguistics},
+	pages = {42--49},
+	url = {http://www.aclweb.org/anthology/W/W14/W14-2608}
+	}

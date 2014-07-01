@@ -2,4 +2,16 @@
 *
 # Except this file
 !.gitignore
+!COPYING
+!CITATION
 !README.md
+!setup.py
+!src/corpus.py
+!src/defaultConfig.py
+!src/features.py
+!src/machineLearning.py
+!src/main.py
+!src/performance.py
+!src/review.py
+!src/rules.py
+!src/setGenerator.py
