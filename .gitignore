@@ -6,6 +6,8 @@
 !CITATION
 !README.md
 !setup.py
+!corpora/
+!resources/
 !src/corpus.py
 !src/defaultConfig.py
 !src/features.py
