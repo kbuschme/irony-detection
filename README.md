@@ -52,25 +52,31 @@ Unpack the files negative-words.txt `opinion-lexicon-English.rar`
 A working [Python](https://www.python.org/) 2 installation (tested with version 2.7.5)
 and the following Python libraries are needed. These can be installed using [pip](https://pypi.python.org/pypi/pip):
 
-* [NumPy](http://www.numpy.org)
+* [NumPy](http://www.numpy.org) (version 1.7.1)
 ```
-> sudo pip install numpy
-```
-
-* [SciPy](http://www.scipy.org)
-```
-> sudo pip install scipy
+> sudo pip install numpy==1.7.1
 ```
 
-* [scikit-learn](http://www.scikit-learn.org/)
+* [SciPy](http://www.scipy.org) (version 0.12.0)
 ```
-> sudo pip install scikit-learn
+> sudo pip install scipy==0.12.0
 ```
 
-* [Natural Language Toolkit](http://www.nltk.org/) (NLTK)
+* [scikit-learn](http://www.scikit-learn.org/) (version 0.14.1)
 ```
-> sudo pip install PyYAML
-> sudo pip install nltk
+> sudo pip install scikit-learn==0.14.1
+```
+
+* [pydot](https://github.com/erocarrera/pydot) (version 1.0.28) with [pyparsing](http://pyparsing.wikispaces.com) (version 1.5.7)
+```
+> sudo pip install pyparsing==1.5.7
+> sudo pip install pydot==1.0.28
+```
+
+* [Natural Language Toolkit](http://www.nltk.org/) (NLTK) (version 2.0.4) with [PyYAML](https://pyyaml.org) (version 3.10)
+```
+> sudo pip install PyYAML==3.10
+> sudo pip install nltk==2.0.4
 ```
 
 Additionally NLTK requires the following models:
