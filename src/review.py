@@ -17,10 +17,10 @@ def loadPolarityLexicon(filenames, categories):
     """
     assert len(filenames) == len(categories)
     polarityLexicon = {}
-    for filename, category in zip(filenames, categories): 
+    for filename, category in zip(filenames, categories):
         with codecs.open(filename, 'r', encoding='latin-1') as wordsFile:
-            polarityLexicon.update({w.strip(): category 
-                                for w in wordsFile.readlines() 
+            polarityLexicon.update({w.strip(): category
+                                for w in wordsFile.readlines()
                                 if w.strip() and not w.strip().startswith(";")})
     return polarityLexicon
 
@@ -28,15 +28,15 @@ def loadPolarityLexicon(filenames, categories):
 def loadPolarityWords(filename):
     """Returns a list containing the words from the given file."""
     with codecs.open(filename, 'r', encoding='latin-1') as wordsFile:
-        return [w.strip() 
-                for w in wordsFile.readlines() 
+        return [w.strip()
+                for w in wordsFile.readlines()
                 if w.strip() and not w.strip().startswith(";")]
 
 
 # ---- Review, Sentence and Token classes ----
 class Review(object):
     """Represents a review and its meta data."""
-    
+
     HTMLParser = HTMLParser()
     sentenceTokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     wordTokenizer = TreebankWordTokenizer()
@@ -64,11 +64,11 @@ class Review(object):
     def __unicode__(self):
         printout = u"{0}, {1} by {2} ({3})\n{4}{5} {6}\n{7}\n{8}\n"
         return printout.format(self.title, self.date.strftime("%B %d, %Y"),
-                                self.author, 
+                                self.author,
                                 u"ironic" if self.ironic else u"regular",
                                 u"\u2605 "*int(float(self.stars)),
-                                u"\u2606 "*int(5-float(self.stars)), 
-                                self.product, 
+                                u"\u2606 "*int(5-float(self.stars)),
+                                self.product,
                                 "-"*60, self.text)
 
     def parseFromFile(self, filename, ironic, fileEncoding='latin-1'):
@@ -82,24 +82,24 @@ class Review(object):
         self.author = findBetween(rawReview, "<AUTHOR>", "</AUTHOR>")
         self.product = findBetween(rawReview, "<PRODUCT>", "</PRODUCT>")
         # Date is inconsistent and has possibly one of the three formats.
-        try: 
+        try:
             self.date = datetime.strptime(
                                 findBetween(rawReview, "<DATE>", "</DATE>"),
                                 "%B %d, %Y")
         except ValueError:
             try: self.date = datetime.strptime(
-                                findBetween(rawReview, "<DATE>", "</DATE>"), 
+                                findBetween(rawReview, "<DATE>", "</DATE>"),
                                 "%d %B %Y")
             except ValueError:
                 self.date = datetime.strptime(
-                                findBetween(rawReview, "<DATE>", "</DATE>"), 
+                                findBetween(rawReview, "<DATE>", "</DATE>"),
                                 "%d %b %Y")
         self.title = findBetween(rawReview, "<TITLE>", "</TITLE>")
 
         # Is it a good practice to strip the review text?
         self.text = findBetween(rawReview, "<REVIEW>", "</REVIEW>").strip()
         self.text = self.preprocess(self.text)
-        
+
         self.sentences = self.tokenizeSentences(self.text)
 
     @property
@@ -114,7 +114,7 @@ class Review(object):
     @property
     def positiveWords(self):
         return [p for s in self.sentences for p in s.positiveWords]
-    
+
     @property
     def negativeWords(self):
         return [n for s in self.sentences for n in s.negativeWords]
@@ -135,9 +135,9 @@ class Review(object):
 
     def tokenizeSentences(self, text):
         return [Sentence(text)
-                for text in self.sentenceTokenizer.tokenize(self.text, 
+                for text in self.sentenceTokenizer.tokenize(self.text,
                                                     realign_boundaries=True)]
-   
+
     def numberOfWords(self):
         return len(self.words)
 
@@ -149,9 +149,9 @@ class Review(object):
         self.positivePolarity = []
         self.negativePolarity = []
         for word in words:
-            self.positivePolarity += [p for p in self.positiveWords 
+            self.positivePolarity += [p for p in self.positiveWords
                                         if p == word]
-            self.negativePolarity += [n for n in self.negativeWords 
+            self.negativePolarity += [n for n in self.negativeWords
                                         if n == word]
 
     def showDetails(self):
@@ -163,9 +163,9 @@ class Review(object):
         print("\nTokens: {tokens}".format(tokens=self.words))
         print("\nPos words:", self.positiveWords)
         print("Neg words:", self.negativeWords)
-        # print("Pos word positions:", [s.positiveWordPositions 
+        # print("Pos word positions:", [s.positiveWordPositions
         #                                 for s in self.sentences])
-        # print("Neg word positions:", [s.negativeWordPositions 
+        # print("Neg word positions:", [s.negativeWordPositions
         #                                 for s in self.sentences])
 
 class Sentence(object):
@@ -191,7 +191,7 @@ class Sentence(object):
         return self.text
 
     def tokenizeWords(self, text):
-        return [Token(w,p) 
+        return [Token(w,p)
                for w,p in self.wordTagger.tag(self.wordTokenizer.tokenize(text))]
 
     @property
@@ -205,7 +205,7 @@ class Sentence(object):
     @property
     def negativeWords(self):
         return [w.text for w in self.words if not w.negativeScore == 0]
-    
+
     @property
     def negativeWordPositions(self):
         return [i for i, w in enumerate(self.words) if not w.negativeScore == 0]
@@ -224,21 +224,21 @@ class Token(object):
         end = None
         self.text = text
         self.pos = pos
-        if (self.text in self.polarityLexicon and 
+        if (self.text in self.polarityLexicon and
                 self.polarityLexicon[self.text] == "positive"):
-            self.positiveScore = 1 
+            self.positiveScore = 1
         else:
             self.positiveScore = 0
 
-        if (self.text in self.polarityLexicon and 
+        if (self.text in self.polarityLexicon and
                 self.polarityLexicon[self.text] == "negative"):
-            self.negativeScore = 1  
+            self.negativeScore = 1
         else:
             self.negativeScore = 0
 
     def __repr__(self):
-        return "Token({0}, {1}, {2})".format(self.text, 
-                                        self.pos, 
+        return "Token({0}, {1}, {2})".format(self.text,
+                                        self.pos,
                                         self.polarity).encode('utf-8')
 
     def __str__(self):
@@ -247,9 +247,9 @@ class Token(object):
     def __unicode__(self):
         return self.text
 
-    def __eq__(self, other): 
-        return (self.text == other.text and self.pos == other.pos and 
-                self.positiveScore == other.positiveScore and 
+    def __eq__(self, other):
+        return (self.text == other.text and self.pos == other.pos and
+                self.positiveScore == other.positiveScore and
                 self.negativeScore == other.negativeScore)
 
     def __hash__(self):
@@ -288,8 +288,8 @@ def findBetweenTag(tag, text):
 def testToken():
     """Test, if the Token class works properly."""
     words = [("Test", "neutral"), ("Gibberish", "neutral"),
-                ("jibber-jabber", "neutral"), 
-                ("correct", "positive"), ("nicely", "positive"), 
+                ("jibber-jabber", "neutral"),
+                ("correct", "positive"), ("nicely", "positive"),
                 ("funny", "negative"), ("weird", "negative")]
     for word, targetPolarity in words:
         token = Token(word)
@@ -300,15 +300,15 @@ def testToken():
 
 def testSentence():
     """Test, if the Sentence class works properly."""
-    phrases = [("Mary had a little lamb.", 
+    phrases = [("Mary had a little lamb.",
                     ["Mary", "had", "a", "litle", "lamb", "."]),
-                ("Does \"this\" work?", 
+                ("Does \"this\" work?",
                     ["Does", "``", "this", "''", "work", "?"]),
     ]
     for phrase, target in phrases:
-        sentence = Sentence(phrase)        
-        if not all(word1 == word2 
-                    for word1, word2 in zip([str(word) 
+        sentence = Sentence(phrase)
+        if not all(word1 == word2
+                    for word1, word2 in zip([str(word)
                             for word in sentence.words], target)):
             testFailed([word for word in sentence.words], target, "Sentence")
 
@@ -317,7 +317,7 @@ def testReview():
     pass
 
 def testFailed(found, expected, label=""):
-    print(("{label} test failed:\tfound '{found}'\t " 
+    print(("{label} test failed:\tfound '{found}'\t "
                     " expected '{expected}'.").format(
                     label=label, found=found, expected=expected))
 

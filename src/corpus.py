@@ -16,8 +16,8 @@ class Corpus(object):
     """Represents a corpus."""
 
     def __init__(self, IDsFilename,
-                corpusPath=CORPUS_PATH, 
-                ironicReviewsPath=IRONIC_REVIEWS_PATH, 
+                corpusPath=CORPUS_PATH,
+                ironicReviewsPath=IRONIC_REVIEWS_PATH,
                 regularReviewsPath=REGULAR_REVIEWS_PATH,
                 utterancesFile=IRONIC_UTTERANCES_FILENAME):
         # Save File locations
@@ -40,12 +40,12 @@ class Corpus(object):
         self.saveCorpus()
 
     def __repr__(self):
-        description = """Corpus('{0}', ironicReviewsPath='{1}', 
+        description = """Corpus('{0}', ironicReviewsPath='{1}',
                         regularReviewsPath='{2}', utterancesFile='{3}')"""
         return description.format(
-                            self.IDsFilename, 
-                            self.ironicReviewPath, 
-                            self.regularReviewsPath, 
+                            self.IDsFilename,
+                            self.ironicReviewPath,
+                            self.regularReviewsPath,
                             self.utterancesFile).encode('utf-8')
 
     def __str__(self):
@@ -55,10 +55,10 @@ class Corpus(object):
         description = "Corpus with {0} ironic and {1} regular (total {2}) reviews."
         numberOfIronic = len(self.ironicReviewIDs)
         numberOfRegular = len(self.regularReviewIDs)
-        return description.format(numberOfIronic, 
+        return description.format(numberOfIronic,
                                     numberOfRegular,
                                     numberOfIronic + numberOfRegular)
-    
+
     def loadIDs(self):
         """Loads the IDs for pairs, ironic and regular utterances."""
         location = self.corpusPath + self.IDsFilename
@@ -78,10 +78,10 @@ class Corpus(object):
     def loadReviews(self):
         """Loads all reviews."""
         self.reviews.update(readReviews(self.ironicReviewIDs,
-                                    self.corpusPath + self.ironicReviewPath, 
+                                    self.corpusPath + self.ironicReviewPath,
                                     ironic=True))
-        self.reviews.update(readReviews(self.regularReviewIDs, 
-                                    self.corpusPath + self.regularReviewsPath, 
+        self.reviews.update(readReviews(self.regularReviewIDs,
+                                    self.corpusPath + self.regularReviewsPath,
                                     ironic=False))
 
     def saveCorpus(self, path=None, filename=None):
@@ -104,27 +104,27 @@ class Corpus(object):
     @property
     def ironicReviews(self):
         """Returns all ironic reviews."""
-        return {ID: review for ID, review in  self.reviews.items() 
+        return {ID: review for ID, review in  self.reviews.items()
                             if ID in self.ironicReviewIDs}
 
     @property
     def regularReviews(self):
         """Returns all regular reviews."""
-        return {ID: review for ID, review in  self.reviews.items() 
+        return {ID: review for ID, review in  self.reviews.items()
                             if ID in self.regularReviewIDs}
 
     @property
     def reviewIDs(self):
-        """Returns the IDs for all reviews.""" 
+        """Returns the IDs for all reviews."""
         #return self.reviews.keys()
         return self.ironicReviewIDs + self.regularReviewIDs
-    
+
 
     @property
     def ironicReviewIDs(self):
-        """Returns the IDs for all ironic reviews.""" 
+        """Returns the IDs for all ironic reviews."""
         return self._ironicReviewIDs + [i for i,r in self._pairReviewIDs]
-    
+
     @property
     def regularReviewIDs(self):
         """Returns the IDs for all regular reviews."""
@@ -138,7 +138,7 @@ class Corpus(object):
     def starDistribution(self):
         """Returns the star distribution of the corpus."""
         return calcStarDistribution(self.reviewIDs, self.reviews)
-        
+
     def ironicStarDistribution(self):
         """Returns the star distribution for the ironic reviews."""
         return calcStarDistribution(self.ironicReviewIDs, self.reviews)
@@ -164,15 +164,15 @@ class Corpus(object):
             reviews = self.reviews
 
         wordSum = sum([len(review.words) for ID, review in reviews.items()])
-        return [(word, amount/float(wordSum)) 
-                for word, amount in self.mostCommonWords(reviews=reviews, 
+        return [(word, amount/float(wordSum))
+                for word, amount in self.mostCommonWords(reviews=reviews,
                                                         amount=amount)]
 
     def polarityDistribution(self, reviews):
         """Show how the polarity is distributed across the corpus."""
 
         for each in reviews.values():
-            print("Positive:", len(each.positiveWords), 
+            print("Positive:", len(each.positiveWords),
                 "\tNegative:", len(each.negativeWords), "\t",
                 self.sentiment(each))
 
@@ -217,8 +217,8 @@ class Corpus(object):
         """Prints the star distribution of ironic and regular reviews."""
         ironicDist = self.ironicStarDistribution()
         regularDist = self.regularStarDistribution()
-        
-        ratings = sorted(set(ironicDist.keys() + regularDist.keys()), 
+
+        ratings = sorted(set(ironicDist.keys() + regularDist.keys()),
                         reverse=True)
 
         print(u"\t      Ironic: Regular:")
@@ -231,9 +231,9 @@ class Corpus(object):
 
     def printWordDistribution(self, amount=100):
         """Prints the word distribution of the ironic and regular reviews."""
-        ironicDist = self.wordDistribution(reviews=self.ironicReviews, 
+        ironicDist = self.wordDistribution(reviews=self.ironicReviews,
                                             amount=amount)
-        regularDist = self.wordDistribution(reviews=self.regularReviews, 
+        regularDist = self.wordDistribution(reviews=self.regularReviews,
                                             amount=amount)
         print("The {amount} most common words:".format(amount=amount))
         print("Ironic:\t\t\t\t Regular:")
@@ -263,10 +263,10 @@ class Corpus(object):
         print(("The corpus contains\n {ironicTotal} ironic reviews and\n "
                 "{regularTotal} regular reviews, so \n"
                 "{total} reviews in total.\n").format(
-                    ironicTotal=numberOfIronicReviews, 
+                    ironicTotal=numberOfIronicReviews,
                     regularTotal=numberOfRegularReviews,
                     total=numberOfReviews))
-        
+
         self.printStarDistribution()
 
         wordCountsAll = [len(v.words) for k,v in self.reviews.items()]
@@ -277,7 +277,7 @@ class Corpus(object):
         averageWordCountIronic = sum(wordCountsIronic) / float(len(wordCountsIronic))
         averageWordCountRegular = sum(wordCountsRegular) / float(len(wordCountsRegular))
 
-        print("\nWords on average:", 
+        print("\nWords on average:",
                 "\nIronic reviews:\t", averageWordCountIronic,
                 "\nRegular reviews:",  averageWordCountRegular,
                 "\nAll reviews:\t",    averageWordCountAll)
@@ -287,18 +287,18 @@ class Corpus(object):
         dictionaryIronic = {w.text.lower() for r in self.ironicReviews.values() for w in r.words}
         dictionaryRegular = {w.text.lower() for r in self.regularReviews.values() for w in r.words}
 
-        print("\nNumber of distinct words:", 
-            "\nIronic reviews:\t", len(dictionaryIronic), 
+        print("\nNumber of distinct words:",
+            "\nIronic reviews:\t", len(dictionaryIronic),
             "\nRegular reviews:",  len(dictionaryRegular),
             "\nAll reviews:\t",    len(dictionaryAll))
 
-        # Distinct words 
+        # Distinct words
         inBothDicts = dictionaryIronic & dictionaryRegular
         justInDictIronic = dictionaryIronic - dictionaryRegular
         justInDictRegular = dictionaryRegular - dictionaryIronic
 
         print("\n{both} words occur in both ironic and regular reviews".format(
-                both=len(inBothDicts)), 
+                both=len(inBothDicts)),
             "\n{ironic} words occur only in ironic reviews and".format(
                 ironic=len(justInDictIronic)),
             "\n{regular} words occur only in regular reviews.\n".format(
@@ -311,7 +311,7 @@ class Corpus(object):
 
 # ---- Basic corpus reading functions ----
 def readIDs(filename, fileEncoding='utf-8-sig'):
-    """Returns lists of IDs for pairs, ironic and regular reviews from the 
+    """Returns lists of IDs for pairs, ironic and regular reviews from the
     given file.
     """
     reviewPairIDs = []
@@ -335,7 +335,7 @@ def readIDs(filename, fileEncoding='utf-8-sig'):
 
 def readReviews(reviewIDs, folder, ironic):
     """Returns a dictionary containing reviews to the given IDs."""
-    return {reviewID: Review(filename="{0}{1}.txt".format(folder, reviewID), 
+    return {reviewID: Review(filename="{0}{1}.txt".format(folder, reviewID),
                             ironic=ironic) for reviewID in reviewIDs}
 
 def readIronicUtterances(reviews, filename, fileEncoding='utf-8-sig'):
@@ -348,14 +348,14 @@ def readIronicUtterances(reviews, filename, fileEncoding='utf-8-sig'):
             # Remove trailing newline character.
             #if utterance.endswith("\n"):
             #    utterance = utterance[:-1]
-            # Remove leading and trailing double quotes and replace 
+            # Remove leading and trailing double quotes and replace
             # double double (sic) quotes within.
             #utterance = utterance[1:-1].replace('""', '"')
 
             utterance = utterance.strip('\n\s')#.replace('""', '"')
             reviews[ID].ironicUtterance = utterance
 
-            
+
             if utterance.strip() in reviews[ID].text:
                 count += 1
             else:
@@ -363,28 +363,28 @@ def readIronicUtterances(reviews, filename, fileEncoding='utf-8-sig'):
                 print("+"*60)
                 print(utterance)
                 print("\n\n")
-                
+
         print("Found", count, "utterances in their reviews!")
 
 def readCorpus(path=CORPUS_PATH, filename=REVIEW_IDS_FILENAME):
-    """Returns the reviews and lists of IDs for regular, ironic and pairs 
+    """Returns the reviews and lists of IDs for regular, ironic and pairs
     from the given files."""
     reviewPairIDs, reviewIronicIDs, reviewRegularIDs = readIDs(path + filename)
-    
+
     reviews = {}
-    reviews.update(readReviews([i for i,r in reviewPairIDs], 
+    reviews.update(readReviews([i for i,r in reviewPairIDs],
                     CORPUS_PATH + IRONIC_REVIEWS_PATH, ironic=True))
-    reviews.update(readReviews([r for i,r in reviewPairIDs], 
+    reviews.update(readReviews([r for i,r in reviewPairIDs],
                     CORPUS_PATH + REGULAR_REVIEWS_PATH, ironic=False))
-    reviews.update(readReviews(reviewIronicIDs, 
+    reviews.update(readReviews(reviewIronicIDs,
                     CORPUS_PATH + IRONIC_REVIEWS_PATH, ironic=True))
-    reviews.update(readReviews(reviewRegularIDs, 
+    reviews.update(readReviews(reviewRegularIDs,
                     CORPUS_PATH + REGULAR_REVIEWS_PATH, ironic=False))
     return reviewPairIDs, reviewIronicIDs, reviewRegularIDs, reviews
 
 def clacGoldStandard(IDs, reviews):
     """Returns the gold standard of the given IDs and reviews."""
-    return {ID: reviews[ID].ironic for ID in IDs} 
+    return {ID: reviews[ID].ironic for ID in IDs}
 
 
 # ----- Basic statistical functions -----
@@ -394,22 +394,22 @@ def calcWordCounts(IDs, reviews):
 
 def calcMeanWordCounts(IDs, wordCounts):
     """Returns the mean number of words of the review for the given IDs."""
-    total = sum([length*count 
-                    for length, count in wordCounts.items()]) 
+    total = sum([length*count
+                    for length, count in wordCounts.items()])
     return total/float(len(IDs))
 
 def calcWordDistribution(IDs, reviews):
     """Returns a counter of the number of occurrences of the words."""
-    return Counter([str(word).lower() 
-                    for ID in IDs 
+    return Counter([str(word).lower()
+                    for ID in IDs
                     for word in reviews[ID].words])
 
 def calcWordDistributionRatio(IDs, reviews):
     """Returns a counter of the ratio of the words to all words."""
-    wordSum = sum([length*count 
+    wordSum = sum([length*count
                     for length, count in calcWordCounts(IDs, reviews).items()])
     return Counter({word: count/float(wordSum)
-                    for word, count 
+                    for word, count
                     in calcWordDistribution(IDs, reviews).items()})
 
 def calcStarDistribution(IDs, reviews):
@@ -427,13 +427,13 @@ def showStatistics(IDLists, reviews, labels=[], plot=False):
     for index, IDs in enumerate(IDLists):
         wordCounts = calcWordCounts(IDs, reviews)
         meanWordCounts = calcMeanWordCounts(IDs, wordCounts)
-        
+
         if not len(labels) == len(IDLists):
             labels.append("{0}. list".format(str(index + 1)))
-        
+
         print("{0} contains {1} reviews".format(labels[index], len(IDs)))
         print("with {0} words on average.".format(meanWordCounts))
-        
+
         starDist = sorted(dict(calcStarDistribution(IDs, reviews).items(),
                             key=lambda (stars, amount): stars, reverse=True))
         for rating, count in starDist:
@@ -453,12 +453,12 @@ def showStatistics(IDLists, reviews, labels=[], plot=False):
         #     plt.show()
 
     amount = 100
-    wordRatios = [calcWordDistributionRatio(IDs, reviews).most_common(amount) 
+    wordRatios = [calcWordDistributionRatio(IDs, reviews).most_common(amount)
                     for IDs in IDLists]
     print("The", amount, "most common words are:")
     print("\t\t\t\t".join(labels))
     for i in range(0, 100):
-        print("\t\t".join(["{0}: {1}".format(ratio[i][0], ratio[i][1]) 
+        print("\t\t".join(["{0}: {1}".format(ratio[i][0], ratio[i][1])
                             for ratio in wordRatios]))
 
 

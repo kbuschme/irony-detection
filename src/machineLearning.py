@@ -18,7 +18,7 @@ from corpus import Corpus
 from features import Feature, createFeatures, extractFeatures
 from features import showFeatureOccurrence, createBagOfWordsDictionary
 
-from features import posStarPolarityDiscrepancy, negStarPolarityDiscrepancy, scareQuotes, scareQuotesNegative, positiveNGramPlusPunctuation, negativeNGramPlusPunctuation, positiveStreak, negativeStreak, ellipsisPlusPunctuation, positiveNGramPlusPunctuation, negativeNGramPlusPunctuation 
+from features import posStarPolarityDiscrepancy, negStarPolarityDiscrepancy, scareQuotes, scareQuotesNegative, positiveNGramPlusPunctuation, negativeNGramPlusPunctuation, positiveStreak, negativeStreak, ellipsisPlusPunctuation, positiveNGramPlusPunctuation, negativeNGramPlusPunctuation
 
 from performance import showPerformance, showMeanPerformance
 from defaultConfig import CORPUS_PATH
@@ -31,9 +31,9 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
     """
     # TODO: Add condition to create corpus, if no file exists.
     print("Training the classifiers using the set at '{path}{file}'".format(
-                                                    path=setPath, 
+                                                    path=setPath,
                                                     file=trainingSetFilename))
-    
+
     trainingSet = Corpus(trainingSetFilename, corpusPath=CORPUS_PATH)
 
     # trainingSet = Corpus.loadCorpus(filename="shuffled_set.pk")
@@ -60,7 +60,7 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
         bowDictionary = None
 
     print("Extracting features...")
-    trainFeatures, trainFeatureVectors = extractFeatures(ids, 
+    trainFeatures, trainFeatureVectors = extractFeatures(ids,
                                             trainingSet.reviews,
                                             bowDictionary=bowDictionary)
 
@@ -81,9 +81,9 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
 
     classifiers = [DecisionTreeClassifier(),
-                    SVC(kernel="linear"), 
-                    SVC(), 
-                    LinearSVC(), 
+                    SVC(kernel="linear"),
+                    SVC(),
+                    LinearSVC(),
                     MultinomialNB(),
                     GaussianNB(),
                     RandomForestClassifier(),
@@ -93,17 +93,17 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
     if testSetFilename == None:
         for c in classifiers:
             applyCrossValidation(c, trainData, trainTargets)
-            
+
             # Show star distribution for each classifier
             # applyCrossValidation(c, trainData, trainTargets, stars=stars)
-        
-        # scores = cross_validation.cross_val_score(classifier, array(data), 
+
+        # scores = cross_validation.cross_val_score(classifier, array(data),
         #                                         array(targets), cv=10)
         # print(scores)
 
     else:
         print("Testing the classifiers using the set at '{path}{file}'".format(
-                                                    path=CORPUS_PATH, 
+                                                    path=CORPUS_PATH,
                                                     file=testSetFilename))
 
         # testSet = Corpus(testSetFilename, corpusPath=CORPUS_PATH)
@@ -115,8 +115,8 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
 
         print("Extracting features...")
-        testFeatures, testFeatureVectors = extractFeatures(testSet.reviewIDs, 
-                                                    testSet.reviews, 
+        testFeatures, testFeatureVectors = extractFeatures(testSet.reviewIDs,
+                                                    testSet.reviews,
                                                     bowDictionary=bowDictionary)
 
         testData = []
@@ -131,7 +131,7 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
             applyClassifier(c, trainData, trainTargets, testData, testTargets)
 
         # print("\n\n\n\n\nApplying Decision Tree Classifier:\n")
-        # applyDecisionTree(trainData, trainTargets, testData, testTargets, 
+        # applyDecisionTree(trainData, trainTargets, testData, testTargets,
         #                 featureNames=[str(f.name) for f in trainFeatures])
         # applyDecisionTree(array(data), array(targets))
         # applySVM(data, targets)
@@ -147,9 +147,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
     """
     # TODO: Add condition to create corpus, if no file exists.
     print("Training the classifiers using the set at '{path}{file}'".format(
-                                                    path=setPath, 
+                                                    path=setPath,
                                                     file=trainingSetFilename))
-    
+
     #trainingSet = Corpus(trainingSetFilename, corpusPath=CORPUS_PATH)
     # trainingSet = Corpus.loadCorpus(filename=trainingSetFilename)
     # trainingSet = Corpus.loadCorpus(filename="training_and_validation_set.pk")
@@ -173,10 +173,10 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
 
     print("Extracting features...")
-#    trainFeatures, trainFeatureVectors = extractFeatures(trainingSet.reviewIDs, 
+#    trainFeatures, trainFeatureVectors = extractFeatures(trainingSet.reviewIDs,
 #                                                trainingSet.reviews)
 
-    
+
     featureConfig = {
         "minus Imba": { u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -188,9 +188,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Positive&Ellipsis": (u"w+..", lambda x: positiveNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Quotes": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Quotes": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Pos&Punctuation": (u"w+!?", positiveNGramPlusPunctuation),
                         u"Neg&Punctuation": (u"w-!?", negativeNGramPlusPunctuation),
@@ -200,9 +200,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Positive&Ellipsis": (u"w+..", lambda x: positiveNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Pos/Neg&Punctuation": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Pos/Neg&Punctuation": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -212,9 +212,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Positive&Ellipsis": (u"w+..", lambda x: positiveNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Hyperbole": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Hyperbole": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -224,9 +224,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Positive&Ellipsis": (u"w+..", lambda x: positiveNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Ellipsis and Punctuation": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Ellipsis and Punctuation": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -237,9 +237,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Positive&Ellipsis": (u"w+..", lambda x: positiveNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Pos/Neg&Ellipsis": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Pos/Neg&Ellipsis": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -249,7 +249,7 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Negative Hyperbole": (u"3w-", negativeStreak),
                         u"Ellipsis and Punctuation": (u"..?!", ellipsisPlusPunctuation),
         },
-        "minus Pos": {  u"Negative Imbalance": (u"w+\u2606 ", 
+        "minus Pos": {  u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
                         u"Neg&Punctuation": (u"w-!?", negativeNGramPlusPunctuation),
@@ -257,7 +257,7 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
                         u"Ellipsis and Punctuation": (u"..?!", ellipsisPlusPunctuation),
                         u"Negative&Ellipsis": (u"w-..", lambda x: negativeNGramPlusPunctuation(x, pattern=r"(\.\.|\. \. \.)$")),
         },
-        "minus Neg": {u"Positive Imbalance": (u"w-\u2605 ", 
+        "minus Neg": {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Pos&Punctuation": (u"w+!?", positiveNGramPlusPunctuation),
@@ -278,7 +278,7 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
 
 
-        trainFeatures, trainFeatureVectors = extractFeatures(ids, 
+        trainFeatures, trainFeatureVectors = extractFeatures(ids,
                                                 trainingSet.reviews, config)
 
         trainTargets = []
@@ -296,9 +296,9 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
 
         classifiers = [DecisionTreeClassifier(),
-                        SVC(kernel="linear"), 
-                        SVC(), 
-                        LinearSVC(), 
+                        SVC(kernel="linear"),
+                        SVC(),
+                        LinearSVC(),
                         MultinomialNB(),
                         GaussianNB(),
                         RandomForestClassifier(),
@@ -308,21 +308,21 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
         if testSetFilename == None:
             for c in classifiers:
                 applyCrossValidation(c, trainData, trainTargets)
-            
-            # scores = cross_validation.cross_val_score(classifier, array(data), 
+
+            # scores = cross_validation.cross_val_score(classifier, array(data),
             #                                         array(targets), cv=10)
             # print(scores)
 
         else:
             print("Testing the classifiers using the set at '{path}{file}'".format(
-                                                        path=CORPUS_PATH, 
+                                                        path=CORPUS_PATH,
                                                         file=testSetFilename))
-            
+
             testSet = Corpus(testSetFilename, corpusPath=CORPUS_PATH)
             # testSet = Corpus.loadCorpus(filename="test_set.pk")
 
             print("Extracting features...")
-            testFeatures, testFeatureVectors = extractFeatures(testSet.reviewIDs, 
+            testFeatures, testFeatureVectors = extractFeatures(testSet.reviewIDs,
                                                     testSet.reviews)
 
             testData = []
@@ -336,14 +336,14 @@ def applyML2(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
             for c in classifiers:
                 applyClassifier(c, trainData, trainTargets, testData, testTargets)
 
-        
+
 def applyCrossValidation(classifier, data, targets, k=10, stars=None):
     """
     Uses k fold cross validation to test classifiers.
 
     Which information is most interesting by cross validation -- mean?
     """
-    print("\nUsing {k} fold cross validation with {c}...".format(c=classifier, 
+    print("\nUsing {k} fold cross validation with {c}...".format(c=classifier,
                                                                 k=k))
 
     goldStandards = []
@@ -388,7 +388,7 @@ def applyCrossValidation(classifier, data, targets, k=10, stars=None):
 
 def showStarDistribution(stars, targets):
     """
-    Computes a star distribution, 
+    Computes a star distribution,
     given a list of stars and a list of targets.
     """
     assert len(stars) == len(targets)
@@ -396,10 +396,10 @@ def showStarDistribution(stars, targets):
     print(distribution)
     print("\tIronic:\tRegular:")
     for i in range(1, 6):
-        print("*"*i, ":\t", distribution[(float(i), 1)], "\t", 
+        print("*"*i, ":\t", distribution[(float(i), 1)], "\t",
                             distribution[(float(i), 0)] )
     for i in range(1, 6):
-        print("\\filledlargestar"*i, "&", distribution[(float(i), 1)], "&", 
+        print("\\filledlargestar"*i, "&", distribution[(float(i), 1)], "&",
                             distribution[(float(i), 0)], "\\\\")
 
 def trainModel(classifier, targets, data):
@@ -419,7 +419,7 @@ def applyClassifier(classifier, trainData, trainTargets, testData, testTargets):
     classification = [model.predict(d)[0] for d in testData]
 
     print("\nUsing {0}".format(classifier))
-    showPerformance(testTargets, classification)    
+    showPerformance(testTargets, classification)
 
 def applySVM(trainData, trainTargets, testData, testTargets):
     """Train and classify using a Support Vector Machine (linear kernel)."""
@@ -457,19 +457,19 @@ def applyDecisionTree(trainData, trainTargets, testData, testTargets, featureNam
     model = decisionTree.fit(trainData, trainTargets)
 
     # Create graph description of the Decision Tree
-    dot_data = StringIO() 
+    dot_data = StringIO()
     #export_graphviz(model, out_file=dot_data, max_depth=5)
     print("Feature names:", featureNames)
-    export_graphviz(model, out_file=dot_data, feature_names=featureNames, 
+    export_graphviz(model, out_file=dot_data, feature_names=featureNames,
                     max_depth=5)
-    export_graphviz(model, out_file="DecisionTree.dot", feature_names=featureNames, 
+    export_graphviz(model, out_file="DecisionTree.dot", feature_names=featureNames,
                     max_depth=5)
     #with open("DecisionTree.dot", 'r') as dotFile:
     #    dotFile.write(exportFile)
     # Create PDF from dot
-    graph = pydot.graph_from_dot_data(dot_data.getvalue()) 
+    graph = pydot.graph_from_dot_data(dot_data.getvalue())
     #path = "/Users/konstantin/Documents/University/Bachelorthesis/paper/src/DecisionTree.dot"
-    #graph = pydot.graph_from_dot_file(path) 
+    #graph = pydot.graph_from_dot_file(path)
     #graph.write_pdf("DecisionTree.pdf")
 
 

@@ -13,10 +13,10 @@ from performance import showPerformance
 def classify(features, featureVectors, decisiveFeatureNames=None):
     """
     Classifies reviews as ironic or regular based on rules.
-    
+
         What is a rule?
         What distinguishes a rule from a feature?
-    
+
     Apply rules:
         -If one of the following features is present, classify as ironic.
     """
@@ -34,21 +34,21 @@ def classify(features, featureVectors, decisiveFeatureNames=None):
                                 "Interrobang",
                                 "Ellipsis and Punctuation",
                                 "Interjection",
-                                #"Emoticon Happy", 
-                                #"Emoticon Laughing", 
-                                #"Emoticon Winking", 
-                                #"Emotion Tongue", 
+                                #"Emoticon Happy",
+                                #"Emoticon Laughing",
+                                #"Emoticon Winking",
+                                #"Emotion Tongue",
                                 #"Onomatopoeia",
-                                #"LoLAcroym", 
+                                #"LoLAcroym",
                                 #"GrinAcronym",
                                 ]
 
     featureNames = [f.name for f in features]
 
-    decisiveFeatureIndices = [featureNames.index(name) 
+    decisiveFeatureIndices = [featureNames.index(name)
                                 for name in decisiveFeatureNames]
 
-    return {ID: any([vector[i] for i in decisiveFeatureIndices]) 
+    return {ID: any([vector[i] for i in decisiveFeatureIndices])
             for ID, vector in featureVectors.items()}
 
 def simpleClassify(featureVectors):
@@ -59,12 +59,12 @@ def applySingleRules(IDsFilename):
     """
     Should originally just apply one rule.
     Is now used to apply one feature to the given corpus.
-    So it basically shows how often each feature occurs in ironic and regular 
+    So it basically shows how often each feature occurs in ironic and regular
     reviews.
     """
-    print("Using the set at '{path}{file}'".format(path=CORPUS_PATH, 
+    print("Using the set at '{path}{file}'".format(path=CORPUS_PATH,
                                                     file=IDsFilename))
-    
+
     print("Creating reviews...(this may take a while)")
     dataSet = Corpus(IDsFilename, corpusPath=CORPUS_PATH)
     print("Loading reviews...")
@@ -73,22 +73,22 @@ def applySingleRules(IDsFilename):
 
 
     print("Extracting features...")
-    features, featureVectors = extractFeatures(dataSet.reviewIDs, 
+    features, featureVectors = extractFeatures(dataSet.reviewIDs,
                                                 dataSet.reviews)
 
     showFeatureOccurrence(features, featureVectors)
 
     gold = dataSet.goldStandard
-    
-    # decisiveFeatureNames = ["Scare quotes", 
+
+    # decisiveFeatureNames = ["Scare quotes",
     #                         "Positive star polarity discrepancy",
     #                         "Negative star polarity discrepancy",
     #                         "Positive Ppunctuation",
     #                         "Negative Ppunctuation",
     #                         "Streak of Positive Words",
     #                         "Ellipsis and Punctuation",
-    #                         "Emoticon Happy", "Emoticon Laughing", 
-    #                         "Emoticon Winking", "Emotion Tongue", 
+    #                         "Emoticon Happy", "Emoticon Laughing",
+    #                         "Emoticon Winking", "Emotion Tongue",
     #                         "LoLAcroym", "GrinAcronym", "Onomatopoeia",
     #                         "Interrobang"]
 
@@ -111,24 +111,24 @@ def applySingleRules(IDsFilename):
 
 def applyRules(IDsFilename):
     """Uses rule based approach to classify the reviews from the given set."""
-    print("Using the set at '{path}{file}'".format(path=CORPUS_PATH, 
+    print("Using the set at '{path}{file}'".format(path=CORPUS_PATH,
                                                     file=IDsFilename))
-    
+
     print("Creating reviews...(this may take a while)")
     dataSet = Corpus(IDsFilename, corpusPath=CORPUS_PATH)
-    
+
     # print("Loading reviews...")
     # dataSet = Corpus.loadCorpus(filename="training_set.pk")
 
     print("Extracting features...")
-    features, featureVectors = extractFeatures(dataSet.reviewIDs, 
+    features, featureVectors = extractFeatures(dataSet.reviewIDs,
                                                 dataSet.reviews)
 
     gold = dataSet.goldStandard
     classification = classify(features, featureVectors)
 
     showFeatureOccurrence(features, featureVectors, gold, classification)
-    
+
     targets = []
     cls = []
 
@@ -150,11 +150,11 @@ def applyRules(IDsFilename):
 #     print("Regular:", len(reviewRegularIDs))
 
 #     IDLists = [reviewIronicIDs, reviewRegularIDs]
-    
+
 #     features, result = extractFeatures(IDLists[0]+IDLists[1], reviews)
 
 #     for i,f in enumerate(features):
-#         classification = [(reviews[ID].ironic, any(vec[i:i+1])) 
+#         classification = [(reviews[ID].ironic, any(vec[i:i+1]))
 #                             for ID, vec in result.items()]
 #         print(f)
 #         #showFeatureOccurrence(reviews, features, result, classification)

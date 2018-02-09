@@ -15,11 +15,11 @@ class Feature(object):
             self.extract = function
         if not short == None:
             self.short = short[:4].encode("utf-8")
-        else: 
+        else:
             self.short = name[:4].encode("utf-8")
 
     def __repr__(self):
-        return "Feature({name}, {function})".format(name=self.name, 
+        return "Feature({name}, {function})".format(name=self.name,
                                                 function=self.extract.__name__)
 
     def __str__(self):
@@ -45,13 +45,13 @@ class RegularExpressionFeature(Feature):
     def extract(self, review):
         """Search for the regular expression in the review's text."""
         if self.regEx.findall(review.text):
-            
-            # if self.name == "Interjektion": #and not self.name == "ExclamationMark": 
+
+            # if self.name == "Interjektion": #and not self.name == "ExclamationMark":
             #     print(self.name, ":", review.ironic, review.ID)
             #     for m in self.regEx.finditer(review.text):
             #         print(m.span())
             #         print(review.text[m.span()[0]:m.span()[1]])
-            
+
             return 1
         else:
             return 0
@@ -62,7 +62,7 @@ def starRating(review):
     """Returns the star rating."""
     return [1 if i+1 == int(review.stars) else 0 for i in range(5)]
 
-def posStarPolarityDiscrepancy(review): 
+def posStarPolarityDiscrepancy(review):
     """
     Returns True if the star rating is 1.0 or 2.0 but the polarity is positive.
     """
@@ -83,7 +83,7 @@ def negStarPolarityDiscrepancy(review):
 # TODO: check if adverbs are good indicators as well.
 def scareQuotes(review):
     """
-    Searches for scare quotes surrounding one or two positive noun, 
+    Searches for scare quotes surrounding one or two positive noun,
     adjective or adverb.
     """
     nounCategories = ["NN", "NNS", "NNP", "NNPS"]
@@ -99,25 +99,25 @@ def scareQuotes(review):
         # Opening quotes
         if review.words[i].text in openingMarks:
             # One on the two words in quotes is a positive adjective of noun
-            if (i + 3 < numberOfWords-1 and 
+            if (i + 3 < numberOfWords-1 and
                 review.words[i+3].text in closingMarks):
-                if (review.words[i+1].polarity == "positive" and 
+                if (review.words[i+1].polarity == "positive" and
                 review.words[i+1].pos in polarityCategories or
                 review.words[i+2].polarity == "positive" and
                 review.words[i+2].pos in polarityCategories):
                     return 1
 
             # The word in quotes is a positive adjective of noun
-            if (i + 2 < numberOfWords-1 and 
+            if (i + 2 < numberOfWords-1 and
                 review.words[i+2].text in closingMarks):
-                if (review.words[i+1].polarity == "positive" and 
+                if (review.words[i+1].polarity == "positive" and
                 review.words[i+1].pos in polarityCategories):
                     return 1
     return 0
 
 def scareQuotesNegative(review):
     """
-    Searches for scare quotes surrounding one or two negative noun, 
+    Searches for scare quotes surrounding one or two negative noun,
     adjective or adverb.
     """
     nounCategories = ["NN", "NNS", "NNP", "NNPS"]
@@ -133,18 +133,18 @@ def scareQuotesNegative(review):
         # Opening quotes
         if review.words[i].text in openingMarks:
             # One on the two words in quotes is a negative adjective of noun
-            if (i + 3 < numberOfWords-1 and 
+            if (i + 3 < numberOfWords-1 and
                 review.words[i+3].text in closingMarks):
-                if (review.words[i+1].polarity == "negative" and 
+                if (review.words[i+1].polarity == "negative" and
                 review.words[i+1].pos in polarityCategories or
                 review.words[i+2].polarity == "negative" and
                 review.words[i+2].pos in polarityCategories):
                     return 1
 
             # The word in quotes is a negative adjective of noun
-            if (i + 2 < numberOfWords-1 and 
+            if (i + 2 < numberOfWords-1 and
                 review.words[i+2].text in closingMarks):
-                if (review.words[i+1].polarity == "negative" and 
+                if (review.words[i+1].polarity == "negative" and
                 review.words[i+1].pos in polarityCategories):
                     return 1
     return 0
@@ -160,10 +160,10 @@ def positiveNGramPlusPunctuation(review, n=4, pattern=r"(!!|!\?|\?!)"):
     for i in range(numberOfWords-1):
         if exclamation.findall(review.words[i].text + review.words[i+1].text):
             # Get (maximal) the 4 previous words
-            previousWords = review.words[(i-n if i > (n-1) else 0):i] 
-            positiveWords = [w for w in previousWords 
+            previousWords = review.words[(i-n if i > (n-1) else 0):i]
+            positiveWords = [w for w in previousWords
                             if w.polarity == "positive"]
-            negativeWords = [w for w in previousWords 
+            negativeWords = [w for w in previousWords
                             if w.polarity == "negative"]
             if positiveWords and not negativeWords:
                 return 1
@@ -174,13 +174,13 @@ def negativeNGramPlusPunctuation(review, n=4, pattern=r"(!!|!\?|\?!)"):
     exclamation = re.compile(pattern, flags=re.UNICODE|re.VERBOSE)
     numberOfWords = len(review.words)
 
-    for i in range(numberOfWords-1): 
+    for i in range(numberOfWords-1):
         if exclamation.findall(review.words[i].text + review.words[i+1].text):
             # Get (maximal) the 4 previous words
-            previousWords = review.words[((i-n) if i > (n-1) else 0):i] 
-            positiveWords = [w for w in previousWords 
+            previousWords = review.words[((i-n) if i > (n-1) else 0):i]
+            positiveWords = [w for w in previousWords
                             if w.polarity == "positive"]
-            negativeWords = [w for w in previousWords 
+            negativeWords = [w for w in previousWords
                             if w.polarity == "negative"]
             if not positiveWords and negativeWords:
                 return 1
@@ -197,7 +197,7 @@ def ellipsisPlusPunctuation(review, pattern=r"(!!|!\?|\?!|\?)"):
     for i in range(numberOfWords-1):
         if exclamation.findall(review.words[i].text + review.words[i+1].text):
             # Get the 2 previous words
-            previousWords = review.words[(i-2 if i > 1 else 0):i] 
+            previousWords = review.words[(i-2 if i > 1 else 0):i]
 
             if ellipsis.findall("".join([w.text for w in previousWords])):
                 return 1
@@ -213,7 +213,7 @@ def ellipsisPlusPunctuation(review, pattern=r"(!!|!\?|\?!|\?)"):
 #         if exclamation.findall(review.words[i].text + review.words[i+1].text):
 #             print
 #             # Get the 2 previous words
-#             previousWords = review.words[(i-2 if i > 1 else 0):i] 
+#             previousWords = review.words[(i-2 if i > 1 else 0):i]
 
 #             if ellipsis.findall("".join([w.text for w in previousWords])):
 #                 return 1
@@ -226,7 +226,7 @@ def positiveStreak(review, length=3):
 
     for i in range(numberOfWords-length):
         if review.words[i].polarity == "positive":
-            if all([True if w.polarity == "positive" else False 
+            if all([True if w.polarity == "positive" else False
                         for w in review.words[i+1:i+length]]):
                 return 1
     return 0
@@ -237,7 +237,7 @@ def negativeStreak(review, length=3):
 
     for i in range(numberOfWords-length):
         if review.words[i].polarity == "negative":
-            if all([True if w.polarity == "negative" else False 
+            if all([True if w.polarity == "negative" else False
                         for w in review.words[i+1:i+length]]):
                 return 1
     return 0
@@ -251,7 +251,7 @@ def createBagOfWordsDictionary(reviews):
     for review in reviews.values():
         for each in review.words:
             word = each.text.lower()
-            if not word in dictionary: 
+            if not word in dictionary:
                 dictionary[word] = index
                 index += 1
 
@@ -267,10 +267,10 @@ def fillBagOfWords(bowDictionary, review):
     return bag
 
 def verifyBagOfWords(review, bowDictionary ):
-    initialWords = set(review.words) 
+    initialWords = set(review.words)
     bag = fillBagOfWords(bowDictionary, review)
     indices = [i for i, v in enumerate(bag) if v == 1]
-    unpackedWords = {word for i, v in enumerate(bag) if v == 1 
+    unpackedWords = {word for i, v in enumerate(bag) if v == 1
                     for word, index in bowDictionary .items() if index == i}
     print("Initial words:", len(initialWords), "Bag words:", len(unpackedWords))
     return not initialWords - unpackedWords
@@ -283,10 +283,10 @@ def createBagOfBigramsDictionary (reviews):
 
     for review in reviews.values():
         # Transform bigrams of tokens to strings.
-        bigrams = [(word1.text.lower(), word2.text.lower()) 
+        bigrams = [(word1.text.lower(), word2.text.lower())
                 for word1, word2 in review.bigrams]
         for bigram in bigrams:
-            if not bigram in dictionary: 
+            if not bigram in dictionary:
                 dictionary[bigram] = index
                 index += 1
 
@@ -297,7 +297,7 @@ def fillBagOfBigrams(bigramDictionary, review):
     """Fill a bag with bigrams of one review."""
     # initialise with zeros
     bag = [0] * len(bigramDictionary )
-    bigrams = [(word1.text.lower(), word2.text.lower()) 
+    bigrams = [(word1.text.lower(), word2.text.lower())
                 for word1, word2 in review.bigrams]
     for bigram in bigrams:
         bag[bigramDictionary[bigram]] = 1
@@ -338,8 +338,8 @@ def sentiment(review):
             result[0] = 1
 
 
-        # print("polarity:", result, "with", ", ".join(review.positiveWords), 
-        #     "as positive words and", ", ".join(review.negativeWords), 
+        # print("polarity:", result, "with", ", ".join(review.positiveWords),
+        #     "as positive words and", ", ".join(review.negativeWords),
         #     "as negative words.")
         return result
 
@@ -349,9 +349,9 @@ def sentiment(review):
 def createFeatures(featureConfig=None):
     """Returns a list of features created from configurations."""
     if featureConfig is None:
-        featureConfig = {u"Positive Imbalance": (u"w-\u2605 ", 
+        featureConfig = {u"Positive Imbalance": (u"w-\u2605 ",
                             posStarPolarityDiscrepancy),
-                        u"Negative Imbalance": (u"w+\u2606 ", 
+                        u"Negative Imbalance": (u"w+\u2606 ",
                             negStarPolarityDiscrepancy),
                         u"Positive Quotes": (u"\"..\"", scareQuotes),
                         u"Negative Quotes": (u"\"--\"", scareQuotesNegative),
@@ -397,7 +397,7 @@ def extractFeatures(reviewIDs, reviews, features=None, createARFF=False, bowDict
         for feature in features:
             featureVectors[ID].append(feature.extract(reviews[ID]))
         #print("Specific Features:", len(features))
-        
+
         # Star Rating
         featureVectors[ID].extend(starRating(review))
 
@@ -412,22 +412,22 @@ def extractFeatures(reviewIDs, reviews, features=None, createARFF=False, bowDict
 
     # Save extracted features in a file
     if createARFF:
-        # As attributes add the specific features, the star rating, 
+        # As attributes add the specific features, the star rating,
         # the sentiment, and all unigrams.
         attributes = []
-        attributes.extend(["\"{name}\"".format(name=feature.name) 
+        attributes.extend(["\"{name}\"".format(name=feature.name)
                             for feature in features])
-        attributes.extend(["\"1 star\"", "\"2 stars\"", "\"3 stars\"", 
+        attributes.extend(["\"1 star\"", "\"2 stars\"", "\"3 stars\"",
                             "\"4 stars\"", "\"5 stars\""])
         attributes.append("\"positive sentiment\"")
-        attributes.extend(["\"word={word}\"".format(word=word) 
+        attributes.extend(["\"word={word}\"".format(word=word)
             for word in sorted(bowDictionary, key=bowDictionary.get)])
-        
+
         # attributes.extend(["\"bigram={bigram1}_{bigram2}\"".format(
-        #                     bigram1=bigram[0], bigram2=bigram[1]) 
+        #                     bigram1=bigram[0], bigram2=bigram[1])
         #     for bigram in sorted(bigramDictionary, key=bigramDictionary.get)])
 
-        categories= {ID: "ironic" if reviews[ID].ironic else "regular" 
+        categories= {ID: "ironic" if reviews[ID].ironic else "regular"
                     for ID in reviewIDs}
 
         createARFFFile(attributes, featureVectors, categories)
@@ -445,7 +445,7 @@ def createARFFFile(features, data, categories, filename="./features.arff"):
         attributes.append("@ATTRIBUTE {name}\tNUMERIC".format(name=feature))
     attributes.append("@ATTRIBUTE class {ironic, regular}")
     # print("\n".join(attributes))
-   
+
     with open(filename, "w") as arffFile:
         arffFile.write(relation + "\n")
         arffFile.write("\n".join(attributes))
@@ -467,11 +467,11 @@ def showFeatureOccurrence(features, featureVectors, gold=None, classification=No
 
     headline = "ID \t\t\tCorrect | {0}".format(
                                     " ".join([f.short + " "*(4 - len(f.short))
-                                            for f in features[:MAX_FEATURES]]))    
+                                            for f in features[:MAX_FEATURES]]))
     print(headline)
     for ID, vec in featureVectors.items():
-        print("{0}{1}{2}\t| {3}".format(ID, 
-                    "\t"*(MAX_ID_LENGTH/len(ID)), 
+        print("{0}{1}{2}\t| {3}".format(ID,
+                    "\t"*(MAX_ID_LENGTH/len(ID)),
                     "Yes " if gold and gold[ID]==classification[ID] else "___",
                     " ".join(["Yes " if v == 1 else "_"*4 for v in vec[:MAX_FEATURES]])))
 
@@ -479,12 +479,12 @@ def showFeatureOccurrence(features, featureVectors, gold=None, classification=No
     vec = [vector[:MAX_FEATURES] for vector in featureVectors.values()]
 
     if not classification == None and not gold == None:
-        correct = sum([1 if gold and gold[ID] == p else 0 
+        correct = sum([1 if gold and gold[ID] == p else 0
                         for ID, p in classification.items()])
     else:
         correct = 0
 
-    occurrences = [sum([1 if v[i] else 0 for v in vec]) 
+    occurrences = [sum([1 if v[i] else 0 for v in vec])
                     for i in range(len(features[:MAX_FEATURES]))]
     print("Summation\t\t{0}\t| {1}".format(correct,
         " ".join([" "*(4-len(str(s))) + str(s) for s in occurrences])))
@@ -541,6 +541,6 @@ def testBagOfWords():
 
 if __name__ == '__main__':
     #testFeatures()
-    createARFFFile(["Feature 1", "Feature 2", "Feature 3", "Feature 4"], 
-                    {1: [1, 1, 0, 1], 2: [1, 0, 0, 1], 3: [0, 1, 0, 1]}, 
+    createARFFFile(["Feature 1", "Feature 2", "Feature 3", "Feature 4"],
+                    {1: [1, 1, 0, 1], 2: [1, 0, 0, 1], 3: [0, 1, 0, 1]},
                     {1: "ironic", 2: "ironic", 3: "regular"})

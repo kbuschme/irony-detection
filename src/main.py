@@ -47,12 +47,12 @@ def runFeaturesMode(arguments):
 
 def exportFeatures():
     corpus = Corpus(SET_FILENAMES[3])
-    features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews, 
+    features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews,
                                                 features=None, createARFF=True)
 
 def showFeatures(IDsFilename=REVIEW_IDS_FILENAME):
     corpus = Corpus(IDsFilename)
-    features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews, 
+    features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews,
                                                 features=None)
 
     showFeatureOccurrence(features, featureVectors)
@@ -76,7 +76,7 @@ def runRulesMode(arguments):
                     "test": SET_FILENAMES[1],
                     "validation": SET_FILENAMES[2],}
 
-    duration = timeit(lambda: applyRules(setFilenames[arguments.set.lower()]), 
+    duration = timeit(lambda: applyRules(setFilenames[arguments.set.lower()]),
                 number=1),
     showDuration(duration)
 
@@ -86,13 +86,13 @@ def runRulesMode(arguments):
 def runMachineLearningMode(arguments):
     """
     Determines which set will be used as the validation set, i.e. the set the
-    classifiers will be tested against. Currently are the following values 
-    available 
+    classifiers will be tested against. Currently are the following values
+    available
     * 'test' and
     * 'cross-validation'.
     """
     if arguments.set.lower() == "cross-validation":
-        duration = timeit(lambda: applyML(SET_FILENAMES[3]), 
+        duration = timeit(lambda: applyML(SET_FILENAMES[3]),
                         number=1)
     elif arguments.set.lower() == "test":
         duration = timeit(lambda: applyML(SET_FILENAMES[0], SET_FILENAMES[1]),
@@ -103,7 +103,7 @@ def runMachineLearningMode(arguments):
 # Set mode
 # ------------------------------------------------------------------------------
 def runSetMode(arguments):
-    duration = timeit(generateSets, number=1), 
+    duration = timeit(generateSets, number=1),
     showDuration(duration)
 
 def generateSets():
@@ -124,7 +124,7 @@ def runTestMode(arguments):
             "ml": testML,
             "reviews": testReviews,
             "rules": testRules,}
-    duration = timeit(tests[arguments.mode], number=1), 
+    duration = timeit(tests[arguments.mode], number=1),
     showDuration(duration)
 
 def createTestReviews():
@@ -136,14 +136,14 @@ def createTestReviews():
     regularIDs = ["47_17_R2A767BWWBGBTK"]
 
     reviews = {}
-    reviews.update(readReviews(ironicIDs, 
-                                CORPUS_PATH + IRONIC_REVIEWS_PATH, 
+    reviews.update(readReviews(ironicIDs,
+                                CORPUS_PATH + IRONIC_REVIEWS_PATH,
                                 True))
-    reviews.update(readReviews(regularIDs, 
-                                CORPUS_PATH + REGULAR_REVIEWS_PATH, 
+    reviews.update(readReviews(regularIDs,
+                                CORPUS_PATH + REGULAR_REVIEWS_PATH,
                                 False))
     return ironicIDs, regularIDs, reviews
-    
+
 def testCorpus():
     """Tests if the corpus can be loaded and displayed."""
     entireCorpus = Corpus("training_and_validation_set.txt")
@@ -185,7 +185,7 @@ def testRules():
     ironicIDs, regularIDs, reviews = createTestReviews()
     features, featureVectors = extractFeatures(ironicIDs + regularIDs, reviews)
 
-    gold = {ID: reviews[ID].ironic for ID in ironicIDs + regularIDs}    
+    gold = {ID: reviews[ID].ironic for ID in ironicIDs + regularIDs}
     classification = ruleClassify(features, featureVectors)
 
     showFeatureOccurrence(features, featureVectors, gold, classification)
@@ -193,7 +193,7 @@ def testRules():
 
 def testML():
     """Uses machine learning based approach to classify reviews."""
-    print(("Test if machine learning approach functions as intended." 
+    print(("Test if machine learning approach functions as intended."
         "-- Nothing happens yet."))
 
 def testReviews():
@@ -212,14 +212,14 @@ def testARFFExport():
     reviewIDs = ironicIDs + regularIDs
     # for review in reviews.values():
     #     print(review)
-    
-    features, featureVectors = extractFeatures(reviewIDs, reviews, 
+
+    features, featureVectors = extractFeatures(reviewIDs, reviews,
                                                 features=None, createARFF=True)
 
     # corpus = Corpus("file_pairing.txt")
     # print("Reviews:", len(corpus.reviews))
 
-    # features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews, 
+    # features, featureVectors = extractFeatures(corpus.reviewIDs, corpus.reviews,
     #                                             features=None, createARFF=True)
 
 
@@ -239,52 +239,52 @@ APPLICATION_DESCRIPTION = "Detects irony in amazon reviews."
 # Main function: Controls the general application behaviour.
 def main():
     # Top-level parser
-    commandParser = argparse.ArgumentParser(prog=APPLICATION_NAME, 
+    commandParser = argparse.ArgumentParser(prog=APPLICATION_NAME,
                                             description=APPLICATION_DESCRIPTION)
     subParsers = commandParser.add_subparsers(title="Commands",
-                                            description="""The following 
+                                            description="""The following
                                                         commands can be invoked.
                                                         """,
                                             help="Valid commands.",
                                             dest="command",)
 
     # Corpus command parser:
-    corpusParser = subParsers.add_parser("corpus", 
+    corpusParser = subParsers.add_parser("corpus",
                                         help="""Show details about the entire
                                                 corpus.""")
     corpusParser.set_defaults(func=runCorpusMode)
     corpusParser.add_argument("info",
-                            choices=["stats", "reviews"], 
-                            default="stats", 
+                            choices=["stats", "reviews"],
+                            default="stats",
                             help="Valid commands.")
 
     # Feature command parser:
-    featureParser = subParsers.add_parser("feature", 
+    featureParser = subParsers.add_parser("feature",
                                         help="""Shows how often each feature
-                                                is found for ironic and 
-                                                regular reviews in the 
+                                                is found for ironic and
+                                                regular reviews in the
                                                 training_and_validation_set.""")
     featureParser.set_defaults(func=runFeaturesMode)
-    featureParser.add_argument("info", 
-                                choices=["export", "show"], 
+    featureParser.add_argument("info",
+                                choices=["export", "show"],
                                 default="show",
-                                help="""Show specific features or export the 
+                                help="""Show specific features or export the
                                         features as an arff file.""")
 
     # Interactive command parser:
     interactiveParser = subParsers.add_parser("interactive",
-                                            help="""The interactive mode 
+                                            help="""The interactive mode
                                                 classifies a given sentence
                                                 using a saved model.""")
     interactiveParser.set_defaults(func=runInteractiveMode)
-    interactiveParser.add_argument("text", 
-                                    type=str, 
-                                    help="""Text to classify, e.g. 
+    interactiveParser.add_argument("text",
+                                    type=str,
+                                    help="""Text to classify, e.g.
                                         \"What a great product ;-)\".""")
 
     # Machine Learning approach command parser:
     mlParser = subParsers.add_parser("ml",
-                                    help="""Use the machine learning approach 
+                                    help="""Use the machine learning approach
                                             to classify reviews.""")
     mlParser.set_defaults(func=runMachineLearningMode)
     mlParser.add_argument("set",
@@ -294,39 +294,39 @@ def main():
 
 
     # Rule-based approach command parser:
-    # rulesParser = subParsers.add_parser("rules", 
-    #                                     help="""Use the rule based approach 
+    # rulesParser = subParsers.add_parser("rules",
+    #                                     help="""Use the rule based approach
     #                                             to classify reviews.""")
     # rulesParser.set_defaults(func=determineTrainingSet)
     # rulesParser.add_argument("set",
     #                         choices=["training", "validation", "test"],
-    #                         default="training", 
+    #                         default="training",
     #                         help="""Set used for the classification.""")
-    
+
 
     # Set command parser:
-    setParser = subParsers.add_parser("sets", 
-                                    help="""Divide the corpus into training, 
+    setParser = subParsers.add_parser("sets",
+                                    help="""Divide the corpus into training,
                                             validation and test set.""")
     setParser.set_defaults(func=lambda: runSetMode(arguments))
 
 
     # Test command parser:
-    # testParser = subParsers.add_parser("test", help="""Test basic functionality 
+    # testParser = subParsers.add_parser("test", help="""Test basic functionality
     #                                                 of the application.""")
     # testParser.set_defaults(func=runTestMode)
     # testParser.add_argument("mode",
-    #                         choices=["ARFF", "BOW", "features", "corpus", 
-    #                                 "ml", "reviews", "rules",], 
-    #                         default="review", 
-    #                         help="""Choose the functionality you want 
+    #                         choices=["ARFF", "BOW", "features", "corpus",
+    #                                 "ml", "reviews", "rules",],
+    #                         default="review",
+    #                         help="""Choose the functionality you want
     #                                 to test.""")
 
 
     # Parse given arguments and call the function specified by the command:
     arguments = commandParser.parse_args()
 
-    if arguments.command in ["corpus", "feature", "interactive", "ml", "rules", 
+    if arguments.command in ["corpus", "feature", "interactive", "ml", "rules",
                             "test"]:
         arguments.func(arguments)
     else:

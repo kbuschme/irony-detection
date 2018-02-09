@@ -54,11 +54,11 @@ def createSets(setSizes=[TRAINING_SET_SIZE, TEST_SET_SIZE, VALIDATION_SET_SIZE])
     reviewPairIDs, reviewIronicIDs, reviewRegularIDs = readIDs(CORPUS_PATH
                                                         + REVIEW_IDS_FILENAME)
 
-    reviewIDs = setToString(createIDLabelSet(reviewIronicIDs, "ironic")) 
-    reviewIDs += setToString(createIDLabelSet(reviewRegularIDs, "regular")) 
-    reviewIDs += setToString(createIDLabelSet([r for i,r in reviewPairIDs], 
-                                        "regular")) 
-    reviewIDs += setToString(createIDLabelSet([i for i,r in reviewPairIDs], 
+    reviewIDs = setToString(createIDLabelSet(reviewIronicIDs, "ironic"))
+    reviewIDs += setToString(createIDLabelSet(reviewRegularIDs, "regular"))
+    reviewIDs += setToString(createIDLabelSet([r for i,r in reviewPairIDs],
+                                        "regular"))
+    reviewIDs += setToString(createIDLabelSet([i for i,r in reviewPairIDs],
                                         "ironic"))
 
     sets = divideData(reviewIDs, setSizes)
@@ -69,21 +69,21 @@ def createSets(setSizes=[TRAINING_SET_SIZE, TEST_SET_SIZE, VALIDATION_SET_SIZE])
 
 def shuffledSet(setFilename=REVIEW_IDS_FILENAME, path=CORPUS_PATH, randomSeed=RANDOM_SEED):
     """Reads IDs and saves a shuffled version of it."""
-    reviewPairIDs, reviewIronicIDs, reviewRegularIDs = readIDs(path + 
+    reviewPairIDs, reviewIronicIDs, reviewRegularIDs = readIDs(path +
                                                                 setFilename)
 
-    reviewIDs = setToString(createIDLabelSet(reviewIronicIDs, "ironic")) 
-    reviewIDs += setToString(createIDLabelSet(reviewRegularIDs, "regular")) 
-    reviewIDs += setToString(createIDLabelSet([r for i,r in reviewPairIDs], 
-                                        "regular")) 
-    reviewIDs += setToString(createIDLabelSet([i for i,r in reviewPairIDs], 
+    reviewIDs = setToString(createIDLabelSet(reviewIronicIDs, "ironic"))
+    reviewIDs += setToString(createIDLabelSet(reviewRegularIDs, "regular"))
+    reviewIDs += setToString(createIDLabelSet([r for i,r in reviewPairIDs],
+                                        "regular"))
+    reviewIDs += setToString(createIDLabelSet([i for i,r in reviewPairIDs],
                                         "ironic"))
 
     random.seed(randomSeed)
     random.shuffle(reviewIDs)
 
     # for each in reviewIDs[1:20]:
-    #     print(each)    
+    #     print(each)
 
     saveSet(reviewIDs, path + "shuffled_set.txt")
 

@@ -4,7 +4,7 @@ from __future__ import print_function
 from numpy import mean, std
 from math import sqrt
 
-# TODO: 
+# TODO:
 # * Modify to work with python 3
 #   * calcPerformance broken in python 3 - See list comprehension with zip.
 
@@ -19,24 +19,24 @@ def calcPerformance(gold, prediction):
     # If gold and prediction are lists of lists.
     if (all(isinstance(l, list) for l in gold) and
             all(isinstance(l, list) for l in prediction)):
-        return [calcPerformance(g, p) 
+        return [calcPerformance(g, p)
                 for g, p in zip(gold, prediction)]
     else:
         result = zip(gold, prediction)
 
-        tp = sum([1 if g and p else 0 
+        tp = sum([1 if g and p else 0
                     for g, p in result])
-        tn = sum([1 if not g and not p else 0 
+        tn = sum([1 if not g and not p else 0
                     for g, p in result])
-        fp = sum([1 if not g and p else 0 
+        fp = sum([1 if not g and p else 0
                     for g, p in result])
-        fn = sum([1 if g and not p else 0 
+        fn = sum([1 if g and not p else 0
                     for g, p in result])
 
-        precision = float(tp)/(tp + fp) if not (tp + fp) == 0 else 1.0 
+        precision = float(tp)/(tp + fp) if not (tp + fp) == 0 else 1.0
         recall = float(tp)/(tp + fn) if not (tp + fn) == 0 else 1.0
         accuracy = float(tp + tn)/float(tp + fp + fn + tn)
-        # if (not (precision == None and recall == None) and 
+        # if (not (precision == None and recall == None) and
         #         not (precision == 0 and recall == 0)):
         if precision is None or recall is None:
             fScore = None
@@ -53,7 +53,7 @@ def calcMeanPerformance(goldStandards, prediction):
     """Calculates the mean performances."""
     assert(len(goldStandards) == len(prediction))
 
-    measures = {"truePositive", "trueNegative", "falsePositive", 
+    measures = {"truePositive", "trueNegative", "falsePositive",
                 "falseNegative", "precision", "recall","accuracy", "F-score"}
 
     performances = calcPerformance(goldStandards, prediction)
@@ -96,7 +96,7 @@ def showEvaluation(performance, label=["ironic", "regular"]):
     # print("False negative:\t{0}".format(performance["falseNegative"]))
 
     # Table form of prediction/gold
-    print("\t\t\tGold: {positive}\tGold: {negative}".format(positive=label[0], 
+    print("\t\t\tGold: {positive}\tGold: {negative}".format(positive=label[0],
                                                             negative=label[1]))
     print("Predict: {positive}\t\t{tp} (tp)\t\t{fp} (fp)".format(
                                             positive=label[0],
@@ -114,7 +114,7 @@ def showMeanEvaluation(performances, label=["ironic", "regular"]):
     meanPerformance = calcMeanPerformance(performances)
     showEvaluation(meanPerformances, label)
     # # Table form of prediction/gold
-    # print("\t\t\tGold: {positive}\tGold: {negative}".format(positive=label[0], 
+    # print("\t\t\tGold: {positive}\tGold: {negative}".format(positive=label[0],
     #                                                         negative=label[1]))
     # print("Predict: {positive}\t\t{tp} (tp)\t\t{fp} (fp)".format(
     #                                     positive=label[0],
@@ -147,7 +147,7 @@ def showMeanScores(performances):
     cleanFScores = [p["F-score"] for p in performances if p["F-score"] is not None]
 
 
-    print("Precision\t{0}\tstd: {1}".format(mean(cleanPrecisions), std(cleanPrecisions)), 
+    print("Precision\t{0}\tstd: {1}".format(mean(cleanPrecisions), std(cleanPrecisions)),
         "\t({0} to {1})".format(min(precisions), max(precisions)))
     print("Recall:\t\t{0}\tstd: {1}".format(mean(cleanRecalls), std(cleanRecalls)),
         "\t({0} to {1})".format(min(recalls), max(recalls)))
