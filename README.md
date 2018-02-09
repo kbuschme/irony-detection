@@ -35,13 +35,13 @@ Unpack the archive `Ironic.rar` into a directory `corpora/SarcasmCorpus/Ironic` 
 
 ### 3. Download additional resources
 
-Download the file `opinion-lexicon-English.rar` which contains the [Opinion Lexicon](http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#lexicon) by Hu and Liu[3] and place it inside the ``resources`` directory
+Download the file `opinion-lexicon-English.rar` which contains the [Opinion Lexicon](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#lexicon) by Hu and Liu[3] and place it inside the `resources` directory
 
 ```
-> curl -o resources/opinion-lexicon-English.rar http://www.cs.uic.edu/~liub/FBS/opinion-lexicon-English.rar
+> curl -o resources/opinion-lexicon-English.rar https://www.cs.uic.edu/~liub/FBS/opinion-lexicon-English.rar
 ```
 
-Unpack the files negative-words.txt `opinion-lexicon-English.rar`
+Unpack the archive `opinion-lexicon-English.rar` and place the files `negative-words.txt` and `positive-words.txt` inside the `resources` directory
 
 ```
 > unrar e resources/opinion-lexicon-English.rar resources/
