@@ -17,17 +17,13 @@ Download the system with the following command
 
 ### 2. Download the corpus
 
-Download the file `SarcasmCorpus.rar` which contains the [Sarcasm Corpus](http://storm.cis.fordham.edu/filatova/SarcasmCorpus.html) by Elena Filatova[2] and place it inside the `corpora` directory
+Download the Sarcasm Corpus by Elena Filatova[2] from its [Github repository](https://github.com/ef2020/SarcasmAmazonReviewsCorpus) and place it inside the `corpora` directory
 
 ```
-> curl -o corpora/SarcasmCorpus.rar http://storm.cis.fordham.edu/~filatova/SarcasmCorpus.rar
+> git clone https://github.com/ef2020/SarcasmAmazonReviewsCorpus.git corpora/SarcasmCorpus
 ```
 
-Unpack the content of the archive `SarcasmCorpus.rar` into a directory `corpora/SarcasmCorpus`
-
-```
-> unrar e corpora/SarcasmCorpus.rar corpora/SarcasmCorpus/
-```
+Alternatively download the [Zip archive](https://github.com/ef2020/SarcasmAmazonReviewsCorpus/archive/master.zip) and place the extracted files in the `corpora` directory.
 
 Unpack the archive `Ironic.rar` into a directory `corpora/SarcasmCorpus/Ironic` and the archive `Regular.rar` into a directory `corpora/SarcasmCorpus/Regular`
 
