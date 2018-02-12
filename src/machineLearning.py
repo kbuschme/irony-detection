@@ -10,7 +10,7 @@ from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import cross_validation
+from sklearn.model_selection import KFold
 from sklearn.externals.six import StringIO
 import pydot    # Draws DecisionTree maps
 
@@ -357,14 +357,15 @@ def applyCrossValidation(classifier, data, targets, k=10, stars=None):
     if stars is not None:
         starDistribution = []
 
-    for train, test in cross_validation.KFold(len(data), k):
-        trainData = [d for i, d in enumerate(data) if i in train]
-        trainTargets = [d for i, d in enumerate(targets) if i in train]
+    kf = KFold(n_splits=k)
+    for train_indices, test_indices in kf.split(data, y=targets):
+        trainData = [d for i, d in enumerate(data) if i in train_indices]
+        trainTargets = [d for i, d in enumerate(targets) if i in train_indices]
 
-        testData = [d for i, d in enumerate(data) if i in test]
-        testTargets = [d for i, d in enumerate(targets) if i in test]
+        testData = [d for i, d in enumerate(data) if i in test_indices]
+        testTargets = [d for i, d in enumerate(targets) if i in test_indices]
         if stars is not None:
-            testStars = [s for i,s in enumerate(stars) if i in test]
+            testStars = [s for i,s in enumerate(stars) if i in test_indices]
 
         model = classifier.fit(trainData, trainTargets)
         classification = list(model.predict(testData))
