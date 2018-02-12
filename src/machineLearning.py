@@ -79,6 +79,8 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
     featureCount = sum([sum(v) for v in trainData])
     # print("Feature found: ", featureCount, "times.")
 
+    trainTargets = array(trainTargets)
+    trainData = array(trainData)
 
     classifiers = [DecisionTreeClassifier(),
                     SVC(kernel="linear"),
@@ -126,6 +128,9 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
         for ID, g in testGold.items():
             testTargets.append(g)
             testData.append(testFeatureVectors[ID])
+
+        testData = array(testData)
+        testTargets = array(testTargets)
 
         for c in classifiers:
             applyClassifier(c, trainData, trainTargets, testData, testTargets)
@@ -343,8 +348,8 @@ def applyCrossValidation(classifier, data, targets, k=10, stars=None):
 
     Which information is most interesting by cross validation -- mean?
     """
-    print("\nUsing {k} fold cross validation with {c}...".format(c=classifier,
-                                                                k=k))
+    print("\nUsing {k} fold cross validation with {c}...".format(
+        c=classifier, k=k))
 
     goldStandards = []
     classifications = []
@@ -362,13 +367,12 @@ def applyCrossValidation(classifier, data, targets, k=10, stars=None):
             testStars = [s for i,s in enumerate(stars) if i in test]
 
         model = classifier.fit(trainData, trainTargets)
-        classification = [model.predict(d)[0] for d in testData]
+        classification = list(model.predict(testData))
 
         goldStandards.append(testTargets)
         classifications.append(classification)
         if stars is not None:
             starDistribution.append(testStars)
-
 
     # Star-rating to category distribution
     if stars is not None:
@@ -380,8 +384,6 @@ def applyCrossValidation(classifier, data, targets, k=10, stars=None):
         showStarDistribution(starsFlat, goldFlat)
         print("Star distribution according to classification:")
         showStarDistribution(starsFlat, classificationFlat)
-
-
 
     showMeanPerformance(goldStandards, classifications)
 
@@ -416,7 +418,7 @@ def applyClassifier(classifier, trainData, trainTargets, testData, testTargets):
     """Train and classify using a Support Vector Machine."""
     model = classifier.fit(trainData, trainTargets)
 
-    classification = [model.predict(d)[0] for d in testData]
+    classification = model.predict(testData)
 
     print("\nUsing {0}".format(classifier))
     showPerformance(testTargets, classification)
