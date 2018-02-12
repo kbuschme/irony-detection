@@ -156,7 +156,7 @@ class Review(object):
 
     def showDetails(self):
         """Show a detailed review representation."""
-        print(this)
+        print(self)
         print("Sentences:\n", "\n".join(
                 ["Sentence({s})".format(s=str(s)) for s in self.sentences]))
         # print("\nWords:\n", "--".join([str(w) for w in self.words]))

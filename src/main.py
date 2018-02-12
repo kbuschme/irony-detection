@@ -18,7 +18,7 @@ from setGenerator import shuffledSet, createSets
 # Corpus Mode
 # ------------------------------------------------------------------------------
 def runCorpusMode(arguments):
-    print("Loading corpus. This may take awhile.")
+    print("Loading corpus. This may take a while...")
     requestedInformation = {"stats": showCorpusStatistics,
                             "reviews": showDetailedReviews,}
     duration = timeit(requestedInformation[arguments.info], number=1)
@@ -39,7 +39,7 @@ def showDetailedReviews(IDsFilename=REVIEW_IDS_FILENAME):
 # Features Mode
 # ------------------------------------------------------------------------------
 def runFeaturesMode(arguments):
-    print("Loading corpus. This may take awhile.")
+    print("Loading corpus. This may take a while...")
     requestedInformation = {"export": exportFeatures,
                             "show": showFeatures,}
     duration = timeit(requestedInformation[arguments.info], number=1)

@@ -260,8 +260,8 @@ class Corpus(object):
         numberOfReviews = len(self.reviews)
         numberOfIronicReviews = len(self.ironicReviews)
         numberOfRegularReviews = len(self.regularReviews)
-        print(("The corpus contains\n {ironicTotal} ironic reviews and\n "
-                "{regularTotal} regular reviews, so \n"
+        print(("The corpus contains\n{ironicTotal} ironic reviews and\n"
+                "{regularTotal} regular reviews, so\n"
                 "{total} reviews in total.\n").format(
                     ironicTotal=numberOfIronicReviews,
                     regularTotal=numberOfRegularReviews,
