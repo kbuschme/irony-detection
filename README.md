@@ -50,39 +50,39 @@ Unpack the archive `opinion-lexicon-English.rar` and place the files `negative-w
 
 ### 4. Install python libraries and language models
 
-A working [Python](https://www.python.org/) 2 installation (tested with version 2.7.5)
+A working [Python](https://www.python.org/) 2 installation (tested with version 2.7.14)
 and the following Python libraries are needed. These can be installed using [pip](https://pypi.python.org/pypi/pip):
 
-* [NumPy](http://www.numpy.org) (version 1.7.1)
+* [NumPy](http://www.numpy.org) (version 1.14.0)
 
     ```
-    > sudo pip install numpy==1.7.1
+    > sudo pip install numpy==1.14.0
     ```
 
-* [SciPy](http://www.scipy.org) (version 0.12.0)
+* [SciPy](http://www.scipy.org) (version 1.0.0)
 
     ```
-    > sudo pip install scipy==0.12.0
+    > sudo pip install scipy==1.0.0
     ```
 
-* [scikit-learn](http://www.scikit-learn.org/) (version 0.14.1)
+* [scikit-learn](http://www.scikit-learn.org/) (version 0.19.1)
 
     ```
-    > sudo pip install scikit-learn==0.14.1
+    > sudo pip install scikit-learn==0.19.1
     ```
 
-* [pydot](https://github.com/erocarrera/pydot) (version 1.0.28) with [pyparsing](http://pyparsing.wikispaces.com) (version 1.5.7)
+* [pydot](https://github.com/erocarrera/pydot) (version 1.2.4) with [pyparsing](http://pyparsing.wikispaces.com) (version 2.2.0)
 
     ```
-    > sudo pip install pyparsing==1.5.7
-    > sudo pip install pydot==1.0.28
+    > sudo pip install pyparsing==2.2.0
+    > sudo pip install pydot==1.2.4
     ```
 
-* [Natural Language Toolkit](http://www.nltk.org/) (NLTK) (version 2.0.4) with [PyYAML](https://pyyaml.org) (version 3.10)
+* [Natural Language Toolkit](http://www.nltk.org/) (NLTK) (version 3.2.5) with [PyYAML](https://pyyaml.org) (version 3.12)
 
     ```
-    > sudo pip install PyYAML==3.10
-    > sudo pip install nltk==2.0.4
+    > sudo pip install PyYAML==3.12
+    > sudo pip install nltk==3.2.5
     ```
 
 Additionally NLTK requires the following models:
