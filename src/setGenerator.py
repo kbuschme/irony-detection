@@ -26,7 +26,7 @@ def divideData(data, setSizes):
         if setNumber == numberOfSets-1:
             result.append(data[offset:])
         else:
-            end = offset + len(data)*setSizes[setNumber]/100
+            end = offset + len(data)*setSizes[setNumber]//100
             result.append(data[offset:end])
             offset = end
     return result

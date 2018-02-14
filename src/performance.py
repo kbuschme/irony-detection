@@ -4,11 +4,6 @@ from __future__ import print_function
 from numpy import mean, std
 from math import sqrt
 
-# TODO:
-# * Modify to work with python 3
-#   * calcPerformance broken in python 3 - See list comprehension with zip.
-
-
 # ---- Functions to calculate performances ----
 def calcPerformance(gold, prediction):
     """
@@ -22,7 +17,7 @@ def calcPerformance(gold, prediction):
         return [calcPerformance(g, p)
                 for g, p in zip(gold, prediction)]
     else:
-        result = zip(gold, prediction)
+        result = list(zip(gold, prediction))
 
         tp = sum([1 if g and p else 0
                     for g, p in result])

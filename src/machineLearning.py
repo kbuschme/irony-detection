@@ -54,7 +54,7 @@ def applyML(trainingSetFilename, testSetFilename=None, setPath=CORPUS_PATH):
 
     if not testSetFilename == None:
         testSet = Corpus(testSetFilename, corpusPath=CORPUS_PATH)
-        reviews = dict(trainingSet.reviews.items() + testSet.reviews.items())
+        reviews = dict(**trainingSet.reviews, **testSet.reviews)
         bowDictionary = createBagOfWordsDictionary(reviews)
     else:
         bowDictionary = None

@@ -3,7 +3,8 @@ from __future__ import print_function
 import codecs
 from re import finditer, findall, escape
 from datetime import datetime
-from HTMLParser import HTMLParser   # for Python 3 use html.parser
+# from HTMLParser import HTMLParser   # for Python 3 use html.parser
+from html.parser import HTMLParser
 
 import nltk.data
 from nltk.tokenize import TreebankWordTokenizer
@@ -59,9 +60,6 @@ class Review(object):
             self.sentenceSpans = []
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         printout = u"{0}, {1} by {2} ({3})\n{4}{5} {6}\n{7}\n{8}\n"
         return printout.format(self.title, self.date.strftime("%B %d, %Y"),
                                 self.author,
@@ -185,9 +183,6 @@ class Sentence(object):
         return "Sentence({0})".format(self.text).encode('utf-8')
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         return self.text
 
     def tokenizeWords(self, text):
@@ -237,14 +232,9 @@ class Token(object):
             self.negativeScore = 0
 
     def __repr__(self):
-        return "Token({0}, {1}, {2})".format(self.text,
-                                        self.pos,
-                                        self.polarity).encode('utf-8')
+        return "Token({0}, {1}, {2})".format(self.text, self.pos, self.polarity)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         return self.text
 
     def __eq__(self, other):

@@ -10,22 +10,19 @@ class Feature(object):
     information from a review.
     """
     def __init__(self, name, short=None, function=None):
-        self.name = name.encode("utf-8")
+        self.name = str(name)
         if not function == None:
             self.extract = function
         if not short == None:
-            self.short = short[:4].encode("utf-8")
+            self.short = str(short[:4])
         else:
-            self.short = name[:4].encode("utf-8")
+            self.short = str(name[:4])
 
     def __repr__(self):
         return "Feature({name}, {function})".format(name=self.name,
                                                 function=self.extract.__name__)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         return u"{name}({short})".format(name=self.name, short=self.short)
 
     def extract(self, review):
@@ -471,7 +468,7 @@ def showFeatureOccurrence(features, featureVectors, gold=None, classification=No
     print(headline)
     for ID, vec in featureVectors.items():
         print("{0}{1}{2}\t| {3}".format(ID,
-                    "\t"*(MAX_ID_LENGTH/len(ID)),
+                    "\t"*(MAX_ID_LENGTH//len(ID)),
                     "Yes " if gold and gold[ID]==classification[ID] else "___",
                     " ".join(["Yes " if v == 1 else "_"*4 for v in vec[:MAX_FEATURES]])))
 

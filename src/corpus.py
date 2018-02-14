@@ -218,8 +218,8 @@ class Corpus(object):
         ironicDist = self.ironicStarDistribution()
         regularDist = self.regularStarDistribution()
 
-        ratings = sorted(set(ironicDist.keys() + regularDist.keys()),
-                        reverse=True)
+        ratings = sorted(set([*ironicDist.keys(), *regularDist.keys()]),
+                         reverse=True)
 
         print(u"\t      Ironic: Regular:")
         for rating in ratings:
@@ -434,8 +434,9 @@ def showStatistics(IDLists, reviews, labels=[], plot=False):
         print("{0} contains {1} reviews".format(labels[index], len(IDs)))
         print("with {0} words on average.".format(meanWordCounts))
 
-        starDist = sorted(dict(calcStarDistribution(IDs, reviews).items(),
-                            key=lambda (stars, amount): stars, reverse=True))
+        starDist = sorted(calcStarDistribution(IDs, reviews).items(),
+                          key=lambda stars_amount: stars_amount[0],
+                          reverse=True)
         for rating, count in starDist:
             print(u"{0}{1}: {2} reviews".format(u"\u2605 "*int(float(rating)),
                                                 u"\u2606 "*int(5-float(rating)),
