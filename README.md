@@ -50,7 +50,7 @@ Unpack the archive `opinion-lexicon-English.rar` and place the files `negative-w
 
 ### 4. Install python libraries and language models
 
-A working [Python](https://www.python.org/) 2 installation (tested with version 2.7.14)
+A working [Python](https://www.python.org/) 3 installation (tested with version 3.6.4)
 and the following Python libraries are needed. These can be installed using [pip](https://pypi.python.org/pypi/pip):
 
 * [NumPy](http://www.numpy.org) (version 1.14.0)
