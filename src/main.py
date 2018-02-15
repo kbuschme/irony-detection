@@ -247,6 +247,7 @@ def main():
                                                         """,
                                             help="Valid commands.",
                                             dest="command",)
+    subParsers.required = True
 
     # Corpus command parser:
     corpusParser = subParsers.add_parser("corpus",
