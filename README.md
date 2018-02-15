@@ -56,33 +56,33 @@ and the following Python libraries are needed. These can be installed using [pip
 * [NumPy](http://www.numpy.org) (version 1.14.0)
 
     ```
-    > sudo pip install numpy==1.14.0
+    > pip install numpy==1.14.0
     ```
 
 * [SciPy](http://www.scipy.org) (version 1.0.0)
 
     ```
-    > sudo pip install scipy==1.0.0
+    > pip install scipy==1.0.0
     ```
 
 * [scikit-learn](http://www.scikit-learn.org/) (version 0.19.1)
 
     ```
-    > sudo pip install scikit-learn==0.19.1
+    > pip install scikit-learn==0.19.1
     ```
 
 * [pydot](https://github.com/erocarrera/pydot) (version 1.2.4) with [pyparsing](http://pyparsing.wikispaces.com) (version 2.2.0)
 
     ```
-    > sudo pip install pyparsing==2.2.0
-    > sudo pip install pydot==1.2.4
+    > pip install pyparsing==2.2.0
+    > pip install pydot==1.2.4
     ```
 
 * [Natural Language Toolkit](http://www.nltk.org/) (NLTK) (version 3.2.5) with [PyYAML](https://pyyaml.org) (version 3.12)
 
     ```
-    > sudo pip install PyYAML==3.12
-    > sudo pip install nltk==3.2.5
+    > pip install PyYAML==3.12
+    > pip install nltk==3.2.5
     ```
 
 Additionally NLTK requires the following models:
